@@ -1,0 +1,14 @@
+﻿  Socket.cpp
+c:\faceanimator\faceanimator\socket.cpp(27): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
+c:\faceanimator\faceanimator\socket.cpp(74): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
+c:\faceanimator\faceanimator\socket.cpp(123): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\faceanimator\faceanimator\socket.cpp(146): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\faceanimator\faceanimator\socket.cpp(155): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\faceanimator\faceanimator\socket.cpp(173): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  MayaConnector.cpp
+c:\faceanimator\faceanimator\mayaconnector.cpp(14): warning C4101: 'e': unreferenced local variable
+c:\faceanimator\faceanimator\mayaconnector.cpp(31): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\faceanimator\faceanimator\mayaconnector.cpp(128): warning C4101: 'e': unreferenced local variable
+  main.cpp
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\urlmon.h(7887): error C2504: 'IZoneIdentifier': base class undefined
+  Generating Code...
