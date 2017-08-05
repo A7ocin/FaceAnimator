@@ -24,6 +24,9 @@
     <ClInclude Include="MayaConnector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render_face.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Socket.cpp">

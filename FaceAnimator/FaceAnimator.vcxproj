@@ -116,6 +116,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;C:\dlib-19.4;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.15063.0\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -127,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="Landmarks.h" />
     <ClInclude Include="MayaConnector.h" />
+    <ClInclude Include="render_face.hpp" />
     <ClInclude Include="Socket.h" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +137,5 @@
     <ClCompile Include="Socket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
