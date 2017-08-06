@@ -24,7 +24,7 @@ along with TDSocket.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <string>
 
-#include <winsock.h>
+#include <WinSock2.h>
 
 /**
 * Simple C++ socket wrapper.
