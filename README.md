@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 -	Visual Studio 2015 (I didn’t try with other versions, let me know if you find out other versions work as well)
 -	Autodesk Maya 2017 (I didn’t try with other versions, let me know if you find out other versions work as well)
--	Dlib 19.4 (I didn’t try with other versions, let me know if you find out other versions work as well)
+-	Dlib 19.4 (http://dlib.net/files/dlib-19.4.zip) (I didn’t try with other versions, let me know if you find out other versions work as well)
   
     -	Extract dlib in C:\dlib-19.4 in order to let Visual Studio find it automatically, otherwise edit the project solution file
   
@@ -24,7 +24,7 @@ These instructions will get you a copy of the project up and running on your loc
     cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=install ..
     ```
 
--	OpenCV 3.2.0 (I didn’t try with other versions, let me know if you find out other versions work as well)
+-	OpenCV 3.2.0 (https://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.2.0/opencv-3.2.0-vc14.exe/download) (I didn’t try with other versions, let me know if you find out other versions work as well)
 
     -	Add an “OPENCV_DIR” environment variable in windows environments variables as well (in my case it is pointing at "C:\OpenCV\opencv\build"), in order to let Visual studio find the path (otherwise just edit the project solution file)
 -	Windows 10 SDK (https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) for using WinSock2
