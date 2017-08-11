@@ -1,7 +1,7 @@
 # FaceAnimator
 
-The aim of this project is to extend Maya with a plug-in for live, real-time facial animation, using images or video (webcam as well) of a face. The 68 face landmarks are extracted using Dlib's face landmarks detector and mapped to a rigged 3D face model in Maya.
-It currently works just on Windows because it exploits WinSock2 socket library, but all the code can be easily ported on the other Oss.
+The aim of this project is to extend Maya with a plug-in for live, real-time facial animation, using images or videos (from webcam as well) of a face. The 68 face landmarks are extracted using Dlib's face landmarks detector and mapped to a rigged 3D face model in Maya.
+It currently works just on Windows because it exploits WinSock2 socket library, but all the code can be easily ported on the other OSs.
 
 ## Getting Started
 
@@ -26,7 +26,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 -	OpenCV 3.2.0 (I didn’t try with other versions, let me know if you find out other versions work as well)
 
-    -	Add an “OPENCV_DIR” environment variable in windows environments variables as well, in order to let Visual studio find the path (otherwise just edit the project solution file)
+    -	Add an “OPENCV_DIR” environment variable in windows environments variables as well (in my case it is pointing at "C:\OpenCV\opencv\build"), in order to let Visual studio find the path (otherwise just edit the project solution file)
 -	Windows 10 SDK (https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) for using WinSock2
 
 ### Installing
