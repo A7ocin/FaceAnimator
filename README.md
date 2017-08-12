@@ -28,17 +28,29 @@ These instructions will get you a copy of the project up and running on your loc
     -	Extract dlib in C:\dlib-19.4 in order to let Visual Studio find it automatically, otherwise edit the project solution file
   
     -   Build dlib (the easy way):
+	
 	    Run cmake-gui as administrator
+		
 		Select "Browse Source" and insert C:/dlib-19.4
+		
 		Select "Browse Build" and insert C:/dlib-19.4/build (if the folder doesn't exist, create it)
+		
 		Click "Configure"
+		
 		MAKE SURE TO SELECT THE Win64 VERSION OF YOUR Visual Studio Installation!!
+		
 		If errors appear, click "Configure" again (no errors should be displayed at this time, just warnings)
+		
 		Click generate
+		
 		In the output window there should be displayer "Configuring done" and "Generating done"
+		
 		Navigate to C:\dlib-19.4\build\dlib and open INSTALL.vcxproj with Visual Studio
+		
 		Select "Release" and "x64" on the top
+		
 		Build the entire solution using Visual Studio
+		
 		Done! :)
 		
     -	Build dlib (the not-so-easy way, some errors may occur):
