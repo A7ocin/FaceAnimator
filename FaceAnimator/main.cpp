@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		//Start capturing ideo from the webcam
-		cv::VideoCapture cap(0);
+		cv::VideoCapture cap("trump.mp4");
 		if (!cap.isOpened())
 		{
 			cerr << "Unable to connect to camera" << endl;
@@ -57,6 +57,13 @@ int main(int argc, char* argv[])
 			cv::Mat temp, temp_small;
 			cap >> temp;
 			flip(temp, temp, 1);
+
+			//// Select ROI
+			//cv::Rect2d croppedFace = cv::selectROI(temp);
+
+			//// Crop image
+			//temp = temp(croppedFace);
+
 			cv::resize(temp, temp_small, cv::Size(), 1.0 / FACE_DOWNSAMPLE_RATIO, 1.0 / FACE_DOWNSAMPLE_RATIO);
 			//cv::resize(temp, temp, cv::Size(), 1.0/FACE_DOWNSAMPLE_RATIO, 1.0/FACE_DOWNSAMPLE_RATIO);
 			// Turn OpenCV's Mat into something dlib can deal with.  Note that this just
@@ -70,7 +77,7 @@ int main(int argc, char* argv[])
 
 
 			// Detect faces 
-			std::vector<rectangle> faces = detector(cimg_small);
+			std::vector<rectangle> faces = detector(cimg);
 			// Find the pose of each face.
 			std::vector<full_object_detection> shapes;
 			for (unsigned long i = 0; i < faces.size(); ++i) {
@@ -80,7 +87,7 @@ int main(int argc, char* argv[])
 					(long)(faces[i].right() * FACE_DOWNSAMPLE_RATIO),
 					(long)(faces[i].bottom() * FACE_DOWNSAMPLE_RATIO)
 				);
-				full_object_detection shape = pose_model(cimg, r);
+				full_object_detection shape = pose_model(cimg, faces[i]);
 				shapes.push_back(shape);
 			}
 			
