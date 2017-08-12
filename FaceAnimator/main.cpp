@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		//Start capturing ideo from the webcam
-		cv::VideoCapture cap("trump.mp4");
+		cv::VideoCapture cap(0);
 		if (!cap.isOpened())
 		{
 			cerr << "Unable to connect to camera" << endl;

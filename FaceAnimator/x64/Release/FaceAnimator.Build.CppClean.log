@@ -1,7 +1,9 @@
 c:\faceanimator\faceanimator\x64\release\vc140.pdb
-c:\faceanimator\faceanimator\x64\release\socket.obj
-c:\faceanimator\faceanimator\x64\release\mayaconnector.obj
 c:\faceanimator\faceanimator\x64\release\main.obj
+c:\faceanimator\faceanimator\x64\release\mayaconnector.obj
+c:\faceanimator\faceanimator\x64\release\socket.obj
+c:\faceanimator\faceanimator\x64\release\networkservices.obj
+c:\faceanimator\faceanimator\x64\release\clientnetwork.obj
 c:\faceanimator\x64\release\faceanimator.exe
 c:\faceanimator\x64\release\faceanimator.ipdb
 c:\faceanimator\x64\release\faceanimator.iobj
