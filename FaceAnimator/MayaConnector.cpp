@@ -27,12 +27,14 @@ MayaConnector::~MayaConnector() {
 
 }
 
+// Transforms a point into ?
 std::string toMelTranslation(std::string name, Point2f pos) {
 	float modifier = 0.001;
 	//return "setAttr " + name + ".translateX " + std::to_string((pos.x - xOffset)) + ";\n setAttr " + name + ".translateY " + std::to_string((-pos.y + yOffset)) + ";\n";
 	return "select -r " + name + ";float $zArr[] = `xform -q -t -ws`;float $z = $zArr[2];move -a (" + std::to_string((pos.x)) + "*$xModifier) (" + std::to_string(-(pos.y)) + "*$yModifier)" + " $z;";
 }
 
+// send data extracted from frames to Maya and creates command for script (?)
 int frm = 0;
 bool MayaConnector::send(Landmarks &data) {
 	if (data.landmarks[CONTOUR1].x == data.landmarks[CONTOUR17].x
@@ -97,6 +99,8 @@ bool MayaConnector::send(Landmarks &data) {
 	frm++;
 	//std::cout << cmd;
 
+
+	// 
 	try {
 		char *char_cmd = new char[cmd.length() + 1];
 		strcpy(char_cmd, cmd.c_str());
