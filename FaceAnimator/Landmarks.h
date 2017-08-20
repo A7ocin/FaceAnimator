@@ -84,10 +84,18 @@ struct Landmarks {
 		for (int i = 0; i < N_LANDMARKS; i++) {
 			landmarks[i] = cv::Point2f(0, 0);
 		}
+		/*rotationVector = cv::Mat(3, 1, CV_64F);
+		translationVector = cv::Mat(3, 1, CV_64F);
+		for (int i = 0; i < 3; i++) {
+			rotationVector.at<int>(0) = 0.0f;
+			translationVector.at<int>(0) = 0.0f;
+		}*/
 
 		time = -1;
 	}
 
+	double xRotation, yRotation, zRotation;
+	double xTranslation, yTranslation, zTranslation;
 	cv::Point2f landmarks[N_LANDMARKS];
 	float time;
 };

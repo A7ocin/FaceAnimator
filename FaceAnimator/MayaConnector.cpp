@@ -35,13 +35,26 @@ std::string toMelTranslation(std::string name, Point2f pos) {
 
 int frm = 0;
 bool MayaConnector::send(Landmarks &data) {
+	if (data.landmarks[CONTOUR1].x == data.landmarks[CONTOUR17].x
+		&& data.landmarks[CONTOUR1].y == data.landmarks[CONTOUR17].y) {
+		return false;
+	}
 	std::string cmd = "";
 	xOffset = data.landmarks[NOSE28].x;
 	yOffset = -data.landmarks[NOSE28].y;
-	cmd += "SelectAll; move -a " + std::to_string(xOffset) + " " + std::to_string(yOffset) + " 0;viewFit;";
-	cmd += "float $xReferencePoint1[] = `xform -q -t -ws CONTOUR1`;float $xReferencePoint2[] = `xform -q -t -ws CONTOUR17`;float $xReferencePoint = ($xReferencePoint1[0]+$xReferencePoint2[0])/2;";
+	cmd += "SelectAll; move -a " + std::to_string(xOffset) + " " + std::to_string(yOffset) + " 0;";
+	//cmd += "SelectAll; move -a " + std::to_string(data.xTranslation) + " " + std::to_string(data.yTranslation) + " " + std::to_string(data.zTranslation) + ";";
+	//std::cout << "Rotation Vector_________ " << std::endl << data.xRotation << std::endl;
+	cmd += "rotate -a " + std::to_string(data.xRotation * 180 / CV_PI) + " " + std::to_string(data.yRotation * -180 / CV_PI) + " " + std::to_string(data.zRotation * -180 / CV_PI) +";";
+	cmd += "viewFit;";
+	cmd += "float $xReferencePoint1[] = `xform -q -t -ws CONTOUR1`;";
+	cmd += "float $xReferencePoint2[] = `xform -q -t -ws CONTOUR17`;";
+	cmd += "float $xReferencePoint = ($xReferencePoint1[0]+$xReferencePoint2[0]) / 2;";
 	cmd += "float $xModifier = $xReferencePoint/" + std::to_string((data.landmarks[CONTOUR1].x + data.landmarks[CONTOUR17].x)/2) + ";";
-	cmd += "float $yReferencePoint1[] = `xform -q -t -ws CONTOUR9`;float $yReferencePoint2[] = `xform -q -t -ws NOSE28`;float $yReferencePoint = ($yReferencePoint1[1]+$yReferencePoint2[1])/2;";
+
+	cmd += "float $yReferencePoint1[] = `xform -q -t -ws CONTOUR9`;";
+	cmd += "float $yReferencePoint2[] = `xform - q - t - ws NOSE28`;";
+	cmd += "float $yReferencePoint = ($yReferencePoint1[1] + $yReferencePoint2[1]) / 2; ";
 	cmd += "float $yModifier = abs($yReferencePoint)/" + std::to_string((data.landmarks[CONTOUR9].y + data.landmarks[NOSE28].y)/2) + ";";
 	//std::cout << "--> "+ std::to_string(data.landmarks[CONTOUR17].x - xOffset) + " - " + std::to_string(data.landmarks[CONTOUR1].x - xOffset) + "\n";
 	//std::cout << "--> " + std::to_string(data.landmarks[INNER_LIPS68].x) + " ; " + std::to_string(data.landmarks[INNER_LIPS68].y) + "\n";

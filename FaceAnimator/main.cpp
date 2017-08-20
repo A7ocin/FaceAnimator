@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	
 	try
 	{
-		//Start capturing ideo from the webcam
+		//Start capturing video from the webcam
 		cv::VideoCapture cap(0);
 		if (!cap.isOpened())
 		{
@@ -104,6 +104,63 @@ int main(int argc, char* argv[])
 					time = currTime;
 				}
 			}
+			/*** UNCOMMENT FOR FACE ORIENTATION DETECTION***/
+
+			if (!shapes.empty()) {
+				// Camera internals
+				double focal_length = temp.cols; // Approximate focal length.
+				cv::Point2d center = cv::Point2d(temp.cols / 2, temp.rows / 2);
+				cv::Mat camera_matrix = (cv::Mat_<double>(3, 3) << focal_length, 0, center.x, 0, focal_length, center.y, 0, 0, 1);
+				cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, cv::DataType<double>::type); // Assuming no lens distortion
+
+				//cout << "Camera Matrix " << endl << camera_matrix << endl;
+				// Output rotation and translation
+				cv::Mat rotation_vector; // Rotation in axis-angle form
+				cv::Mat translation_vector;
+
+				// 2D image points. If you change the image, you need to change vector
+				std::vector<cv::Point2d> image_points = get_2d_image_points(data);
+
+				// 3D model points.
+				std::vector<cv::Point3d> model_points = get_3d_model_points();
+
+				// Solve for pose
+				cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rotation_vector, translation_vector);
+
+				// Project a 3D point (0, 0, 1000.0) onto the image plane.
+				// We use this to draw a line sticking out of the nose
+
+				std::vector<cv::Point3d> nose_end_point3D;
+				std::vector<cv::Point2d> nose_end_point2D;
+				nose_end_point3D.push_back(cv::Point3d(0, 0, 1000.0));
+
+				projectPoints(nose_end_point3D, rotation_vector, translation_vector, camera_matrix, dist_coeffs, nose_end_point2D);
+
+
+				for (int i = 0; i < image_points.size(); i++)
+				{
+					circle(temp, image_points[i], 3, cv::Scalar(0, 0, 255), -1);
+				}
+
+				cv::line(temp, image_points[0], nose_end_point2D[0], cv::Scalar(255, 0, 0), 2);
+
+				//data.rotationVector = rotation_vector;
+				//data.translationVector = translation_vector;
+				data.xRotation = rotation_vector.at<double>(0);
+				data.yRotation = rotation_vector.at<double>(1);
+				data.zRotation = rotation_vector.at<double>(2);
+
+				data.xTranslation = translation_vector.at<double>(0);
+				data.yTranslation = translation_vector.at<double>(1);
+				data.zTranslation = translation_vector.at<double>(2);
+
+				//cout << "Rotation Vector " << endl << rotation_vector << endl;
+				//cout << "Translation Vector" << endl << translation_vector << endl;
+
+				//cout << nose_end_point2D << endl;
+			}
+
+			/*** END ***/
 			if (!shapes.empty()) {
 				my_window.set_data(&data);
 				if (my_window.recording) {
@@ -114,51 +171,7 @@ int main(int argc, char* argv[])
 				record = !record;
 			}*/
 
-			/*** UNCOMMENT FOR FACE ORIENTATION DETECTION***/
-
-			//// Camera internals
-			//double focal_length = temp.cols; // Approximate focal length.
-			//cv::Point2d center = cv::Point2d(temp.cols / 2, temp.rows / 2);
-			//cv::Mat camera_matrix = (cv::Mat_<double>(3, 3) << focal_length, 0, center.x, 0, focal_length, center.y, 0, 0, 1);
-			//cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, cv::DataType<double>::type); // Assuming no lens distortion
-
-			//																		//cout << "Camera Matrix " << endl << camera_matrix << endl;
-			//																		// Output rotation and translation
-			//cv::Mat rotation_vector; // Rotation in axis-angle form
-			//cv::Mat translation_vector;
-
-			//// 2D image points. If you change the image, you need to change vector
-			//std::vector<cv::Point2d> image_points = get_2d_image_points(data);
-
-			//// 3D model points.
-			//std::vector<cv::Point3d> model_points = get_3d_model_points();
-
-			//// Solve for pose
-			//cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rotation_vector, translation_vector);
-
-			//// Project a 3D point (0, 0, 1000.0) onto the image plane.
-			//// We use this to draw a line sticking out of the nose
-
-			//std::vector<cv::Point3d> nose_end_point3D;
-			//std::vector<cv::Point2d> nose_end_point2D;
-			//nose_end_point3D.push_back(cv::Point3d(0, 0, 1000.0));
-
-			//projectPoints(nose_end_point3D, rotation_vector, translation_vector, camera_matrix, dist_coeffs, nose_end_point2D);
-
-
-			//for (int i = 0; i < image_points.size(); i++)
-			//{
-			//	circle(temp, image_points[i], 3, cv::Scalar(0, 0, 255), -1);
-			//}
-
-			//cv::line(temp, image_points[0], nose_end_point2D[0], cv::Scalar(255, 0, 0), 2);
-
-			////cout << "Rotation Vector " << endl << rotation_vector << endl;
-			////cout << "Translation Vector" << endl << translation_vector << endl;
-
-			////cout << nose_end_point2D << endl;
-
-			/*** END ***/
+			
 				
 			// Display it all on the screen
 			/*cv::resize(temp, temp, cv::Size(), 0.5, 0.5);
@@ -168,6 +181,7 @@ int main(int argc, char* argv[])
 			/*win.clear_overlay();
 			win.set_image(cimg);
 			win.add_overlay(render_face_detections(shapes));*/
+			shapes.clear();
 
 			// Calculate FPS
 			framecount++;
