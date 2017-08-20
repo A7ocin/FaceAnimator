@@ -92,11 +92,15 @@ Then open the “FaceAnimator.sln” solution file with Visual Studio and make s
 
 Right click on Source Files --> Add --> Existing Item and add C:\dlib-19.4\dlib\all\source.cpp
 
+Achtung! If after building the solution you get an error from the IZoneIdentifier class, remove source.cpp from the sources
+
 Build the solution by right clicking on the solution in the solution explorer (on the right of the VS window) and click “Build Solution”
 
-If no errors are displayed, open the 3D model “Face.mb” under the “Models” folder in the FaceAnimator folder. Then, in Maya, open the script editor (bottom-right button) and load the “FaceAnimatorSimple3.mel” script and run it
+If no errors are displayed, open Maya 2018 (as administrator, if possible), open the script editor (bottom-right button) and load the “FAConnector.mel” script and run it
 
 Finally, run FaceAnimator by hitting F5 in Visual Studio or by executing the .exe file under “/x64/Release/” folder.
+
+If any opencv .dll is missing during the execution, add it to the FaceAnimator Release folder.
 
 ## Contributing
 

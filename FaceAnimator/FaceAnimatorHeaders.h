@@ -16,7 +16,6 @@
 //Local headers
 #include "MayaConnector.h"
 #include "Landmarks.h"
-#include "render_face.hpp"
 
 //Dlib headers
 #include <dlib/opencv.h>

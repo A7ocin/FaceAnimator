@@ -1,24 +1,24 @@
 #include "FaceAnimatorHeaders.h"
 
-//Entry point
+// Entry point
 int main(int argc, char* argv[])
 {
-	// generate FaceAnimators windows
+	//Hide cmd window
+	FreeConsole();
+
+	// Generate FaceAnimator windows
 	FaceAnimatorGui my_window;
 	my_window.set_background_color(255, 255, 255);
 	
 	try
 	{
-		//Start capturing video from the webcam
+		// Start capturing video from the webcam
 		cv::VideoCapture cap(0);
 		if (!cap.isOpened())
 		{
 			cerr << "Unable to connect to camera" << endl;
 			return 1;
 		}
-
-		//image_window win;
-		//cv::namedWindow("Webcam", CV_WINDOW_AUTOSIZE);
 
 		// Setup FPS calculation
 		int framecount = 0;
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 		// Grab and process frames until the main window is closed by the user.
 		while (!my_window.is_closed())
 		{
-			//handle input
+			// Handle input
 			if (framecount % 15 == 0)
 			{
 				char key = cv::waitKey(1);
@@ -46,14 +46,8 @@ int main(int argc, char* argv[])
 					cout << "esc key is pressed by user" << endl;
 					break;
 				}
-				/*else if (key == 'p') {
-					record = !record;
-					if (record)
-						cout << "recording ON" << endl;
-					else
-						cout << "recording OFF" << endl;
-				}*/
 			}
+
 			// Grab a frame
 			cv::Mat temp, temp_small;
 			cap >> temp;
@@ -79,6 +73,7 @@ int main(int argc, char* argv[])
 
 			// Detect faces 
 			std::vector<rectangle> faces = detector(cimg);
+
 			// Find the pose of each face.
 			std::vector<full_object_detection> shapes;
 			for (unsigned long i = 0; i < faces.size(); ++i) {
@@ -93,7 +88,7 @@ int main(int argc, char* argv[])
 			}
 			
 			Landmarks &data = Landmarks();
-			// update of landmarks based on shapes (current face pose)
+			// Update of landmarks based on shapes (current face pose)
 			for (int l = 0; l <= N_LANDMARKS; ++l) {
 				if (!shapes.empty()) {
 					//cout << shapes[0].part(l);
@@ -105,7 +100,8 @@ int main(int argc, char* argv[])
 					time = currTime;
 				}
 			}
-			/*** UNCOMMENT FOR FACE ORIENTATION DETECTION***/
+
+			/*** COMMENT/UNCOMMENT FOR FACE ORIENTATION DETECTION***/
 
 			if (!shapes.empty()) {
 				// Camera internals
@@ -130,25 +126,22 @@ int main(int argc, char* argv[])
 
 				// Project a 3D point (0, 0, 1000.0) onto the image plane.
 				// We use this to draw a line sticking out of the nose
-
 				std::vector<cv::Point3d> nose_end_point3D;
 				std::vector<cv::Point2d> nose_end_point2D;
 				nose_end_point3D.push_back(cv::Point3d(0, 0, 1000.0));
 
 				projectPoints(nose_end_point3D, rotation_vector, translation_vector, camera_matrix, dist_coeffs, nose_end_point2D);
 
-				// ?
+				// Draw a tiny red dot for each image point (nose tip, corners of eyes and mouth, chin)
 				for (int i = 0; i < image_points.size(); i++)
 				{
 					circle(temp, image_points[i], 3, cv::Scalar(0, 0, 255), -1);
 				}
 
-				// ?
+				// Draw a line connecting the tip of the nose with the tip of Pinocchio's nose
 				cv::line(temp, image_points[0], nose_end_point2D[0], cv::Scalar(255, 0, 0), 2);
 				
-				// ?
-				//data.rotationVector = rotation_vector;
-				//data.translationVector = translation_vector;
+				// Grab face rotation and translation values to send them to Maya
 				data.xRotation = rotation_vector.at<double>(0);
 				data.yRotation = rotation_vector.at<double>(1);
 				data.zRotation = rotation_vector.at<double>(2);
@@ -163,24 +156,25 @@ int main(int argc, char* argv[])
 				//cout << nose_end_point2D << endl;
 			}
 
-			/*** END ***/
+			/*** END ORIENTATION DETECTION***/
+
+
+			// Done, send everything to Maya
+
 			if (!shapes.empty()) {
 				my_window.set_data(&data);
 				if (my_window.recording) {
 					connector.send(data);
 				}
 			}
-			/*if (record) {
-				record = !record;
-			}*/
 
 			
 				
-			// Display it all on the screen
+			// Now display it all on the screen
 			/*cv::resize(temp, temp, cv::Size(), 0.5, 0.5);
 			cv::imshow("Fast Facial Landmark Detector", temp);*/
 
-			// display frame and face detected countours on overlay
+			// Display frame and face detected countours on overlay
 			my_window.display_frame(cimg, shapes);
 			/*win.clear_overlay();
 			win.set_image(cimg);
