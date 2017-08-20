@@ -3,6 +3,7 @@ class FaceAnimatorGui : public drawable_window
 {
 
 public:
+	// b = buttons		c = label		mbar = menu bar		img = 
 	FaceAnimatorGui() :
 		c(*this),
 		b1(*this),
@@ -14,6 +15,7 @@ public:
 	{
 		img.set_title("Face Animator landmark detector");
 
+		// Interface buttons
 		b1.set_pos(10, 60);
 		b1.set_name("Send current frame");
 		b1.set_style(button_style_toolbar1());
@@ -30,12 +32,14 @@ public:
 		b4.set_name("Load video");
 		b4.set_style(button_style_toolbar1());
 
+		// label used to give instructions initially
 		c.set_pos(b2.left(), b2.bottom() + 20);
 		c.set_text("Usage:\n 1) Press \"Send current frame\" to map the current face landmarks to the 3D Maya model.\n 2) Press \"Record\" to keep sending frames to Maya (can be slow)\n 3) Press \"Load image\" to animate the model starting from a given face image\n 4) Press \"Load videp\" to animate the model starting from a given face video");
 		
 		b1.set_click_handler(*this, &FaceAnimatorGui::sendToMaya);
 		b2.set_click_handler(*this, &FaceAnimatorGui::startRecording);
 
+		// setting menubar menus
 		mbar.set_number_of_menus(4);
 
 		mbar.set_menu_name(0, "Camera", 'C');
@@ -51,6 +55,7 @@ public:
 		
 		set_size(550, 250);
 
+		// 
 		counter = 0;
 
 		set_title("Face Animator controller");

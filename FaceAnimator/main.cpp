@@ -3,6 +3,7 @@
 //Entry point
 int main(int argc, char* argv[])
 {
+	// generate FaceAnimators windows
 	FaceAnimatorGui my_window;
 	my_window.set_background_color(255, 255, 255);
 	
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
 			}
 			
 			Landmarks &data = Landmarks();
-
+			// update of landmarks based on shapes (current face pose)
 			for (int l = 0; l <= N_LANDMARKS; ++l) {
 				if (!shapes.empty()) {
 					//cout << shapes[0].part(l);
@@ -136,14 +137,16 @@ int main(int argc, char* argv[])
 
 				projectPoints(nose_end_point3D, rotation_vector, translation_vector, camera_matrix, dist_coeffs, nose_end_point2D);
 
-
+				// ?
 				for (int i = 0; i < image_points.size(); i++)
 				{
 					circle(temp, image_points[i], 3, cv::Scalar(0, 0, 255), -1);
 				}
 
+				// ?
 				cv::line(temp, image_points[0], nose_end_point2D[0], cv::Scalar(255, 0, 0), 2);
-
+				
+				// ?
 				//data.rotationVector = rotation_vector;
 				//data.translationVector = translation_vector;
 				data.xRotation = rotation_vector.at<double>(0);
@@ -177,6 +180,7 @@ int main(int argc, char* argv[])
 			/*cv::resize(temp, temp, cv::Size(), 0.5, 0.5);
 			cv::imshow("Fast Facial Landmark Detector", temp);*/
 
+			// display frame and face detected countours on overlay
 			my_window.display_frame(cimg, shapes);
 			/*win.clear_overlay();
 			win.set_image(cimg);

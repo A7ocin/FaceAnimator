@@ -80,7 +80,7 @@ enum Landmark {
 
 struct Landmarks {
 	Landmarks() {
-
+		// Initialize landmarks to 0,0
 		for (int i = 0; i < N_LANDMARKS; i++) {
 			landmarks[i] = cv::Point2f(0, 0);
 		}
@@ -96,7 +96,7 @@ struct Landmarks {
 
 	double xRotation, yRotation, zRotation;
 	double xTranslation, yTranslation, zTranslation;
-	cv::Point2f landmarks[N_LANDMARKS];
+	cv::Point2f landmarks[N_LANDMARKS]; //?
 	float time;
 };
 

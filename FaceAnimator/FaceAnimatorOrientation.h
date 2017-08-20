@@ -1,5 +1,5 @@
 #pragma once
-//Construct a set of key points from a 3d face model for face orientation
+//Construct a set of key points from a 3D face model for face orientation
 std::vector<cv::Point3d> get_3d_model_points()
 {
 	std::vector<cv::Point3d> modelPoints;

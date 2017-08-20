@@ -5,6 +5,12 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <opencv2/highgui/highgui.hpp>
 
+// draws polylines given 
+// - a cv Matrix representing the image
+// - 
+// - first point in the landmark enumeration corresponding to that face feature
+// - last point in the landmark enumeration corresponding to that face feature
+// - whether the polyline is a closed polygon or not
 void draw_polyline(cv::Mat &img, const dlib::full_object_detection& d, const int start, const int end, bool isClosed = false)
 {
 	std::vector <cv::Point> points;
@@ -16,6 +22,7 @@ void draw_polyline(cv::Mat &img, const dlib::full_object_detection& d, const int
 
 }
 
+// draw polylines for each face feature
 void render_face(cv::Mat &img, const dlib::full_object_detection& d)
 {
 	DLIB_CASSERT
