@@ -81,6 +81,11 @@ int main(int argc, char* argv[])
 			//// Crop image
 			//temp = temp(croppedFace);
 
+			double scaleFactor = (temp.size().height * 100)/480;
+
+			//640x480
+			//cv::resize(temp, temp, cv::Size(cap.get(cv::CAP_PROP_FRAME_WIDTH), cap.get(cv::CAP_PROP_FRAME_HEIGHT)), 0, 0, CV_INTER_LINEAR);
+			cv::resize(temp, temp, cv::Size(temp.size().width * 100 / scaleFactor, temp.size().height * 100 / scaleFactor), 0, 0, CV_INTER_LINEAR);
 			cv::resize(temp, temp_small, cv::Size(), 1.0 / FACE_DOWNSAMPLE_RATIO, 1.0 / FACE_DOWNSAMPLE_RATIO);
 			//cv::resize(temp, temp, cv::Size(), 1.0/FACE_DOWNSAMPLE_RATIO, 1.0/FACE_DOWNSAMPLE_RATIO);
 			// Turn OpenCV's Mat into something dlib can deal with.  Note that this just
