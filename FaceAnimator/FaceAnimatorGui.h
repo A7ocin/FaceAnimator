@@ -43,7 +43,7 @@ public:
 
 		// Label used to give instructions initially
 		c.set_pos(b2.left(), b2.bottom() + 20);
-		c.set_text("Usage:\n 1) Press \"Send current frame\" to map the current face landmarks to the 3D Maya model.\n 2) Press \"Record\" to keep sending frames to Maya (can be slow)\n 3) Press \"Load image\" to animate the model starting from a given face image\n 4) Press \"Load videp\" to animate the model starting from a given face video");
+		c.set_text("Usage:\n 1) Press \"Send current frame\" to map the current face landmarks to the 3D Maya model.\n 2) Press \"Record\" to keep sending frames to Maya (can be slow)\n 3) Press \"Load image\" to animate the model starting from a given face image\n 4) Press \"Load video\" to animate the model starting from a given face video\n Achtung! Use Send current frame and Record even if you are not using the camera!");
 		
 		b1.set_click_handler(*this, &FaceAnimatorGui::sendToMaya);
 		b2.set_click_handler(*this, &FaceAnimatorGui::startRecording);
@@ -59,15 +59,19 @@ public:
 		mbar.set_menu_name(2, "Video", 'V');
 		mbar.set_menu_name(3, "About", 'A');
 
+		mbar.menu(0).add_menu_item(menu_item_text("Open Camera", *this, &FaceAnimatorGui::openCamera, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_text("Send current frame", *this, &FaceAnimatorGui::sendToMaya, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_text("Record", *this, &FaceAnimatorGui::startRecording, 'C'));
-		mbar.menu(0).add_menu_item(menu_item_text("Open Camera", *this, &FaceAnimatorGui::openCamera, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_separator());
 
 		mbar.menu(1).add_menu_item(menu_item_text("Load Image", *this, &FaceAnimatorGui::loadImage,'I'));
+		mbar.menu(1).add_menu_item(menu_item_text("Send current frame", *this, &FaceAnimatorGui::sendToMaya, 'C'));
+		mbar.menu(1).add_menu_item(menu_item_text("Record", *this, &FaceAnimatorGui::startRecording, 'C'));
 		mbar.menu(1).add_menu_item(menu_item_separator());
 
 		mbar.menu(2).add_menu_item(menu_item_text("Load Video", *this, &FaceAnimatorGui::loadVideo, 'V'));
+		mbar.menu(2).add_menu_item(menu_item_text("Send current frame", *this, &FaceAnimatorGui::sendToMaya, 'C'));
+		mbar.menu(2).add_menu_item(menu_item_text("Record", *this, &FaceAnimatorGui::startRecording, 'C'));
 		mbar.menu(2).add_menu_item(menu_item_separator());
 
 		mbar.menu(3).add_menu_item(menu_item_text("About FaceAnimator", *this, &FaceAnimatorGui::show_about, 'A'));

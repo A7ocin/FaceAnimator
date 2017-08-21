@@ -3,6 +3,8 @@
 The aim of this project is to extend Maya with a plug-in for live, real-time facial animation, using images or videos (from webcam as well) of a face. The 68 face landmarks are extracted using Dlib's face landmarks detector and mapped to a rigged 3D face model in Maya.
 It currently works just on Windows because it exploits WinSock2 socket library, but all the code can be easily ported on the other OSs.
 
+![alt text](https://github.com/A7ocin/FaceAnimator/blob/master/Example.png)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -102,9 +104,15 @@ Finally, run FaceAnimator by hitting F5 in Visual Studio or by executing the .ex
 
 If any opencv .dll is missing during the execution, add it to the FaceAnimator Release folder.
 
+## Troubleshooting
+
+If FaceAnimator tells you some dll is missing or you can't load a video from file, please copy opencv_320.dll, opencv_320d.dll and all the dll files similar to opencv_ffmpeg*.dll from the OpenCV folder into the FaceAnimator Release folder.
+
+If you encounter different issues, please open an issue here on Github in order for us to fix it as soon as possible.
+
 ## Contributing
 
-If you are willing to contribute to the project, just open new issues directly here on GitHub or send me an email. 
+If you are willing to contribute to the project, just open new issues directly here on GitHub or send us an email. 
 
 ## Authors
 

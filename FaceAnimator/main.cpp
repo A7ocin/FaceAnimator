@@ -16,6 +16,9 @@ int main(int argc, char* argv[])
 		cv::VideoCapture cap(0);
 		cv::Mat capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
 		cv::VideoCapture capVideo = cv::VideoCapture(my_window.vidPath);
+
+		//Go to last frame in the video to allow a new one to be loaded instead of the default
+		capVideo.set(cv::CAP_PROP_POS_FRAMES, capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1);
 		
 		if (!cap.isOpened())
 		{
@@ -65,6 +68,7 @@ int main(int argc, char* argv[])
 					temp = capImage;
 					break;
 				case my_window.VIDEO:
+					//Every time a video gets loaded, it needs to be processed entirely before loading a new one
 					if (capVideo.get(cv::CAP_PROP_POS_FRAMES) == capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1) {
 						capVideo = cv::VideoCapture(my_window.vidPath);
 						capVideo.set(cv::CAP_PROP_POS_FRAMES, 1);
