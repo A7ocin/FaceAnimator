@@ -1,4 +1,5 @@
 #pragma once
+
 class FaceAnimatorGui : public drawable_window
 {
 
@@ -40,6 +41,8 @@ public:
 		
 		b1.set_click_handler(*this, &FaceAnimatorGui::sendToMaya);
 		b2.set_click_handler(*this, &FaceAnimatorGui::startRecording);
+		b3.set_click_handler(*this, &FaceAnimatorGui::loadImage);
+		//b4.set_click_handler(*this, &FaceAnimatorGui::loadVideo);
 
 		// Setting menubar menus
 		mbar.set_number_of_menus(4);
@@ -52,6 +55,12 @@ public:
 		mbar.menu(0).add_menu_item(menu_item_text("Send current frame", *this, &FaceAnimatorGui::sendToMaya, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_text("Record", *this, &FaceAnimatorGui::startRecording, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_separator());
+
+		mbar.menu(1).add_menu_item(menu_item_text("Load Image", *this, &FaceAnimatorGui::loadImage,'I'));
+		mbar.menu(1).add_menu_item(menu_item_separator());
+
+		//mbar.menu(2).add_menu_item(menu_item_text("Load Video", *this, &FaceAnimatorGui::loadVideo, 'V'));
+		//mbar.menu(2).add_menu_item(menu_item_separator());
 
 		mbar.menu(3).add_menu_item(menu_item_text("About FaceAnimator", *this, &FaceAnimatorGui::show_about, 'A'));
 		
@@ -79,6 +88,10 @@ public:
 
 	Landmarks *data;
 	boolean recording = false;
+	boolean loadIm = false;
+
+	string path;
+	cv::Mat image;
 
 private:
 
@@ -95,14 +108,60 @@ private:
 		else b2.set_name("Record");
 	}
 
+	void loadImage() {
+		// Initialize OPENFILENAME (Open dialogue box)
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = hwnd;
+		ofn.lpstrFile = szFile;
+		// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
+		// use the contents of szFile to initialize itself.
+		ofn.lpstrFile[0] = '\0';
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+		// Display the Open dialog box. 
+
+		if (GetOpenFileName(&ofn) == TRUE)
+			hf = CreateFile(ofn.lpstrFile, GENERIC_READ, 0, (LPSECURITY_ATTRIBUTES)NULL,
+				OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
+
+		path = ofn.lpstrFile;
+
+		image = cv::imread(path, CV_LOAD_IMAGE_COLOR);   // Read the file
+		loadIm = !loadIm;
+		if (!image.data) {
+			message_box("Error", "It was not possible to open the image.");
+		}
+		// constructor for the creation of an Open dialog box.
+		BOOL WINAPI GetOpenFileName(
+			_Inout_ LPOPENFILENAME lpofn
+		);
+	}
+	
 	void show_about()
 	{
 		message_box("About", "This is an attempt to provide a facial animator for Maya, based on dlib and OpenCV. If you find this useful or totally useless, please leave a star or a comment here: https://github.com/A7ocin/FaceAnimator");
 	}
+
+
 
 	unsigned long counter;
 	label c;
 	button b1, b2, b3, b4;
 	menu_bar mbar;
 	image_window img;
+
+	// Open dialog window
+	OPENFILENAME ofn;       // common dialog box structure
+	char szFile[260];       // buffer for file name
+	HWND hwnd;              // owner window
+	HANDLE hf;              // file handle
+	
+
 };

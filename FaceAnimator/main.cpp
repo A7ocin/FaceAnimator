@@ -27,6 +27,8 @@ int main(int argc, char* argv[])
 		start = std::clock();
 
 		bool record = false;
+		bool loadedI = false;
+		// bool loadedV = false;
 
 		float time = 0;
 
@@ -50,7 +52,13 @@ int main(int argc, char* argv[])
 
 			// Grab a frame
 			cv::Mat temp, temp_small;
-			cap >> temp;
+			if (!my_window.loadIm) {
+				cap >> temp;
+			}
+			else {
+				temp = my_window.image;
+			}
+			
 			flip(temp, temp, 1);
 
 			//// Select ROI
@@ -165,6 +173,9 @@ int main(int argc, char* argv[])
 				my_window.set_data(&data);
 				if (my_window.recording) {
 					connector.send(data);
+				}
+				if (my_window.loadIm){
+
 				}
 			}
 
