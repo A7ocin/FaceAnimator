@@ -1,4 +1,5 @@
 #pragma once
+#include <tchar.h>
 
 class FaceAnimatorGui : public drawable_window
 {
@@ -11,6 +12,7 @@ public:
 		b2(*this),
 		b3(*this),
 		b4(*this),
+		b5(*this),
 		mbar(*this),
 		img()
 	{
@@ -35,6 +37,10 @@ public:
 		b4.set_name("Load video");
 		b4.set_style(button_style_toolbar1());
 
+		b5.set_pos(410, 60);
+		b5.set_name("Open camera");
+		b5.set_style(button_style_toolbar1());
+
 		// Label used to give instructions initially
 		c.set_pos(b2.left(), b2.bottom() + 20);
 		c.set_text("Usage:\n 1) Press \"Send current frame\" to map the current face landmarks to the 3D Maya model.\n 2) Press \"Record\" to keep sending frames to Maya (can be slow)\n 3) Press \"Load image\" to animate the model starting from a given face image\n 4) Press \"Load videp\" to animate the model starting from a given face video");
@@ -42,7 +48,8 @@ public:
 		b1.set_click_handler(*this, &FaceAnimatorGui::sendToMaya);
 		b2.set_click_handler(*this, &FaceAnimatorGui::startRecording);
 		b3.set_click_handler(*this, &FaceAnimatorGui::loadImage);
-		//b4.set_click_handler(*this, &FaceAnimatorGui::loadVideo);
+		b4.set_click_handler(*this, &FaceAnimatorGui::loadVideo);
+		b5.set_click_handler(*this, &FaceAnimatorGui::openCamera);
 
 		// Setting menubar menus
 		mbar.set_number_of_menus(4);
@@ -54,13 +61,14 @@ public:
 
 		mbar.menu(0).add_menu_item(menu_item_text("Send current frame", *this, &FaceAnimatorGui::sendToMaya, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_text("Record", *this, &FaceAnimatorGui::startRecording, 'C'));
+		mbar.menu(0).add_menu_item(menu_item_text("Open Camera", *this, &FaceAnimatorGui::openCamera, 'C'));
 		mbar.menu(0).add_menu_item(menu_item_separator());
 
 		mbar.menu(1).add_menu_item(menu_item_text("Load Image", *this, &FaceAnimatorGui::loadImage,'I'));
 		mbar.menu(1).add_menu_item(menu_item_separator());
 
-		//mbar.menu(2).add_menu_item(menu_item_text("Load Video", *this, &FaceAnimatorGui::loadVideo, 'V'));
-		//mbar.menu(2).add_menu_item(menu_item_separator());
+		mbar.menu(2).add_menu_item(menu_item_text("Load Video", *this, &FaceAnimatorGui::loadVideo, 'V'));
+		mbar.menu(2).add_menu_item(menu_item_separator());
 
 		mbar.menu(3).add_menu_item(menu_item_text("About FaceAnimator", *this, &FaceAnimatorGui::show_about, 'A'));
 		
@@ -82,15 +90,25 @@ public:
 		img.add_overlay(render_face_detections(shapes));
 	}
 
+	void clearOverlay() {
+		img.clear_overlay();
+	}
+
 	void set_data(Landmarks *inputData) {
 		data = inputData;
 	}
 
 	Landmarks *data;
 	boolean recording = false;
-	boolean loadIm = false;
+	enum sourceEnum
+	{
+		CAMERA,
+		IMAGE,
+		VIDEO
+	};
+	int source = CAMERA;
 
-	string path;
+	string imgPath = "trump.jpg", vidPath = "trump.mp4";
 	cv::Mat image;
 
 private:
@@ -109,39 +127,47 @@ private:
 	}
 
 	void loadImage() {
-		// Initialize OPENFILENAME (Open dialogue box)
-		ZeroMemory(&ofn, sizeof(ofn));
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = hwnd;
-		ofn.lpstrFile = szFile;
-		// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
-		// use the contents of szFile to initialize itself.
-		ofn.lpstrFile[0] = '\0';
-		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = NULL;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+		OPENFILENAME ofn = { 0 };
+		TCHAR szFileName[MAX_PATH] = _T("");
 
-		// Display the Open dialog box. 
+		ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
+		ofn.hwndOwner = 0;
+		ofn.lpstrFilter = _T("All Files (*.*)\0*.*\0Text Files (*.txt)\0*.txt\0\0");
+		ofn.lpstrFile = szFileName;
+		ofn.nMaxFile = MAX_PATH;
+		ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+		ofn.lpstrDefExt = _T("txt");
 
-		if (GetOpenFileName(&ofn) == TRUE)
-			hf = CreateFile(ofn.lpstrFile, GENERIC_READ, 0, (LPSECURITY_ATTRIBUTES)NULL,
-				OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
-
-		path = ofn.lpstrFile;
-
-		image = cv::imread(path, CV_LOAD_IMAGE_COLOR);   // Read the file
-		loadIm = !loadIm;
-		if (!image.data) {
-			message_box("Error", "It was not possible to open the image.");
+		if (GetOpenFileName(&ofn)) // user selected an input file
+		{
+			MessageBox(NULL, szFileName, _T("It works!"), MB_OK);
+			source = IMAGE;
+			imgPath = szFileName;
 		}
-		// constructor for the creation of an Open dialog box.
-		BOOL WINAPI GetOpenFileName(
-			_Inout_ LPOPENFILENAME lpofn
-		);
+	}
+
+	void loadVideo() {
+		OPENFILENAME ofn = { 0 };
+		TCHAR szFileName[MAX_PATH] = _T("");
+
+		ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
+		ofn.hwndOwner = 0;
+		ofn.lpstrFilter = _T("All Files (*.*)\0*.*\0Text Files (*.txt)\0*.txt\0\0");
+		ofn.lpstrFile = szFileName;
+		ofn.nMaxFile = MAX_PATH;
+		ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+		ofn.lpstrDefExt = _T("txt");
+
+		if (GetOpenFileName(&ofn)) // user selected an input file
+		{
+			MessageBox(NULL, szFileName, _T("It works!"), MB_OK);
+			source = VIDEO;
+			vidPath = szFileName;
+		}
+	}
+
+	void openCamera() {
+		source = CAMERA;
 	}
 	
 	void show_about()
@@ -153,7 +179,7 @@ private:
 
 	unsigned long counter;
 	label c;
-	button b1, b2, b3, b4;
+	button b1, b2, b3, b4, b5;
 	menu_bar mbar;
 	image_window img;
 

@@ -1,11 +1,9 @@
-﻿  MayaConnector.cpp
-MayaConnector.cpp(17): warning C4101: 'e': unreferenced local variable
-MayaConnector.cpp(133): warning C4101: 'e': unreferenced local variable
-  main.cpp
+﻿  main.cpp
   Generating code
-  153 of 5519 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+  150 of 5524 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    36 functions had inline decision re-evaluated but remain unchanged
+    46 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
+Socket.obj : warning LNK4099: PDB 'vc140.pdb' was not found with 'Socket.obj' or at 'C:\FaceAnimator\x64\Release\vc140.pdb'; linking object as if no debug info
   FaceAnimator.vcxproj -> C:\FaceAnimator\x64\Release\FaceAnimator.exe
   FaceAnimator.vcxproj -> C:\FaceAnimator\x64\Release\FaceAnimator.pdb (Full PDB)

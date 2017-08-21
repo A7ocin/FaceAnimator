@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
 	//Hide cmd window
-	FreeConsole();
+	//FreeConsole();
 
 	// Generate FaceAnimator windows
 	FaceAnimatorGui my_window;
@@ -14,6 +14,9 @@ int main(int argc, char* argv[])
 	{
 		// Start capturing video from the webcam
 		cv::VideoCapture cap(0);
+		cv::Mat capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
+		cv::VideoCapture capVideo(my_window.vidPath);
+		
 		if (!cap.isOpened())
 		{
 			cerr << "Unable to connect to camera" << endl;
@@ -52,14 +55,25 @@ int main(int argc, char* argv[])
 
 			// Grab a frame
 			cv::Mat temp, temp_small;
-			if (!my_window.loadIm) {
-				cap >> temp;
-			}
-			else {
-				temp = my_window.image;
+			switch (my_window.source)
+			{
+				case my_window.CAMERA:
+					cap >> temp;
+					break;
+				case my_window.IMAGE:
+					temp = capImage;
+					break;
+				case my_window.VIDEO:
+					if (capVideo.get(cv::CAP_PROP_POS_FRAMES) == capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1) {
+						capVideo.set(cv::CAP_PROP_POS_FRAMES, 1);
+					}
+					capVideo >> temp;
+					break;
 			}
 			
-			flip(temp, temp, 1);
+			if (my_window.source == my_window.CAMERA) {
+				flip(temp, temp, 1);
+			}
 
 			//// Select ROI
 			//cv::Rect2d croppedFace = cv::selectROI(temp);
@@ -174,9 +188,9 @@ int main(int argc, char* argv[])
 				if (my_window.recording) {
 					connector.send(data);
 				}
-				if (my_window.loadIm){
+				/*if (my_window.loadIm){
 
-				}
+				}*/
 			}
 
 			
