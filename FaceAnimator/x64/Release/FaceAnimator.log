@@ -1,8 +1,11 @@
-﻿  main.cpp
+﻿  MayaConnector.cpp
+MayaConnector.cpp(17): warning C4101: 'e': unreferenced local variable
+MayaConnector.cpp(133): warning C4101: 'e': unreferenced local variable
+  main.cpp
   Generating code
-  153 of 5502 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+  153 of 5519 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    34 functions had inline decision re-evaluated but remain unchanged
+    36 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   FaceAnimator.vcxproj -> C:\FaceAnimator\x64\Release\FaceAnimator.exe
   FaceAnimator.vcxproj -> C:\FaceAnimator\x64\Release\FaceAnimator.pdb (Full PDB)

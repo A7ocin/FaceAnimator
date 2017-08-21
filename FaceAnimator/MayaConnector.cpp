@@ -29,8 +29,14 @@ MayaConnector::~MayaConnector() {
 
 // Create a MEL command to map a point amongst the 68 landmarks point to the corresponding joint in Maya
 std::string toMelTranslation(std::string name, Point2f pos) {
+	std::string output;
 	//return "setAttr " + name + ".translateX " + std::to_string((pos.x - xOffset)) + ";\n setAttr " + name + ".translateY " + std::to_string((-pos.y + yOffset)) + ";\n";
-	return "select -r " + name + ";float $zArr[] = `xform -q -t -ws`;float $z = $zArr[2];move -a (" + std::to_string((pos.x)) + "*$xModifier) (" + std::to_string(-(pos.y)) + "*$yModifier)" + " $z;";
+	output = "select -r " + name + ";";
+	output += "float $zArr[] = `xform - q - t - ws`;";
+	output += "float $z = $zArr[2];";
+	output += "move -a -x (" + std::to_string((pos.x)) + "*$xModifier);";
+	output += "move -a -y (" + std::to_string(-(pos.y)) + "*$yModifier);";
+	return output;
 }
 
 // Send data extracted from frames to Maya by constructing a MEL command script (cmd) that is being sent via TCP/IP
@@ -40,6 +46,13 @@ bool MayaConnector::send(Landmarks &data) {
 	// Prevent Maya from collapsing all the joint if no face is detected
 	if (data.landmarks[CONTOUR1].x == data.landmarks[CONTOUR17].x
 		&& data.landmarks[CONTOUR1].y == data.landmarks[CONTOUR17].y) {
+		return false;
+	}
+
+	//Manage extreme rotations
+	if (abs(data.xRotation * 180 / CV_PI) > 45
+		|| abs(data.yRotation * -180 / CV_PI) > 45
+		|| abs(data.zRotation * -180 / CV_PI) > 45) {
 		return false;
 	}
 
