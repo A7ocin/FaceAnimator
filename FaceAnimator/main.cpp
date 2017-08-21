@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 		// Start capturing video from the webcam
 		cv::VideoCapture cap(0);
 		cv::Mat capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
-		cv::VideoCapture capVideo(my_window.vidPath);
+		cv::VideoCapture capVideo = cv::VideoCapture(my_window.vidPath);
 		
 		if (!cap.isOpened())
 		{
@@ -61,10 +61,12 @@ int main(int argc, char* argv[])
 					cap >> temp;
 					break;
 				case my_window.IMAGE:
+					capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
 					temp = capImage;
 					break;
 				case my_window.VIDEO:
 					if (capVideo.get(cv::CAP_PROP_POS_FRAMES) == capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1) {
+						capVideo = cv::VideoCapture(my_window.vidPath);
 						capVideo.set(cv::CAP_PROP_POS_FRAMES, 1);
 					}
 					capVideo >> temp;

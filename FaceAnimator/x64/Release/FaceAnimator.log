@@ -1,7 +1,7 @@
 ﻿  main.cpp
   Generating code
-  154 of 5526 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
+  167 of 5545 functions ( 3.0%) were compiled, the rest were copied from previous compilation.
+    19 functions were new in current compilation
     36 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 Socket.obj : warning LNK4099: PDB 'vc140.pdb' was not found with 'Socket.obj' or at 'C:\FaceAnimator\x64\Release\vc140.pdb'; linking object as if no debug info
