@@ -138,6 +138,24 @@ bool MayaConnector::send(Landmarks &data) {
 	return true;
 }
 
+bool MayaConnector::sendScript(std::string script) {
+	try {
+		char *char_cmd = new char[script.length() + 1];
+		strcpy(char_cmd, script.c_str());
+
+		if (internal_socket.send(char_cmd) < script.length()) {
+			std::cout << "full message not sent! Expected " << std::to_string(script.length()) << " of data." << std::endl;
+		}
+
+		delete[] char_cmd;
+		return true;
+	}
+	catch (int e) {
+		connect();
+		return false;
+	}
+}
+
 bool MayaConnector::isConnected() {
 	return connected;
 }

@@ -15,6 +15,7 @@ public:
 	virtual ~MayaConnector();
 
 	bool send(Landmarks &data);
+	bool sendScript(std::string script);
 	bool isConnected();
 
 private:

@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
 	//Hide cmd window
-	//FreeConsole();
+	FreeConsole();
 
 	// Generate FaceAnimator windows
 	FaceAnimatorGui my_window;

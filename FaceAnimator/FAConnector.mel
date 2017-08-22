@@ -8,9 +8,11 @@ closeHypershade;
 
 //Open connection on port 5055
 if( `commandPort -q ":5055"` ) {
-    commandPort -cl -n ":5055";
+    //commandPort -cl -n ":5055";
 }
-commandPort -n ":5055";
+else{
+    commandPort -n ":5055";
+}
 
 //Set initial frame
 currentTime 1;
@@ -20,8 +22,18 @@ setKeyframe CONTOUR1 CONTOUR2 CONTOUR3 CONTOUR4 CONTOUR5 CONTOUR6 CONTOUR7 CONTO
 //Comment the following lines if you don't want to tweak the interface
 displayPref -wsa "none";            //full if you want to show wireframe
 select -r head:Mesh;                //select mesh    
-ToggleIsolateSelect;                //Isolata head
-isolateSelect -state 1 modelPanel3; //(hide joints)
+
+int $isoView;
+string $currentPanel = "modelPanel3";
+string $panelType = `getPanel -to $currentPanel`;
+
+if ($panelType == "modelPanel") 
+{
+$isoView = (1 - `isolateSelect -q -s $currentPanel`);
+enableIsolateSelect $currentPanel $isoView;
+}
+
 //Hide grid
 modelPanelBarDecorationsCallback("GridBtn", "MainPane|viewPanes|modelPanel3|modelPanel3|modelPanel3", "MainPane|viewPanes|modelPanel3|modelPanel3|modelEditorIconBar"); 
 restoreLastPanelWithFocus();
+
