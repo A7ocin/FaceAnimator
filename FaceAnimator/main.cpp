@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
 		// Start capturing video from the webcam
 		cv::VideoCapture cap(0);
 		cv::Mat capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
+		string prev_path = my_window.vidPath; // store current video path
 		cv::VideoCapture capVideo = cv::VideoCapture(my_window.vidPath);
 
 		//Go to last frame in the video to allow a new one to be loaded instead of the default
@@ -33,8 +34,6 @@ int main(int argc, char* argv[])
 		start = std::clock();
 
 		bool record = false;
-		bool loadedI = false;
-		// bool loadedV = false;
 
 		float time = 0;
 
@@ -61,18 +60,26 @@ int main(int argc, char* argv[])
 			switch (my_window.source)
 			{
 				case my_window.CAMERA:
+					prev_path = ""; // in order to get the video to start from the beginning
+									// if the user chooses to switch between sources
 					cap >> temp;
 					break;
 				case my_window.IMAGE:
+					prev_path = ""; // see comment above
 					capImage = cv::imread(my_window.imgPath, CV_LOAD_IMAGE_COLOR);
 					temp = capImage;
 					break;
 				case my_window.VIDEO:
-					//Every time a video gets loaded, it needs to be processed entirely before loading a new one
-					if (capVideo.get(cv::CAP_PROP_POS_FRAMES) == capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1) {
+					// if a new video is loaded while another one has been previously selected,
+					// the new video will be processed instead of the new one starting from the first frame 
+					if (my_window.vidPath != prev_path) {
+						capVideo = cv::VideoCapture(my_window.vidPath);
+						capVideo.set(cv::CAP_PROP_POS_AVI_RATIO, 0);
+					} else if (capVideo.get(cv::CAP_PROP_POS_FRAMES) == capVideo.get(CV_CAP_PROP_FRAME_COUNT) - 1) { // get next frame
 						capVideo = cv::VideoCapture(my_window.vidPath);
 						capVideo.set(cv::CAP_PROP_POS_FRAMES, 1);
 					}
+					prev_path = my_window.vidPath;
 					capVideo >> temp;
 					break;
 			}
